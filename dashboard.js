@@ -68,8 +68,7 @@ const login = async () => {
     if (response.ok) {
       console.log("Login successful:", data.token);
       localStorage.setItem("token", data.token); // Store token in localStorage
-      window.location.href =
-        "http://127.0.0.1:5500/frontend/user-dashboard.html"; // Redirect
+      window.location.href = "./user-dashboard.html"; // Redirect
     } else {
       alert(data.message || "Login failed. Please try again.");
     }
@@ -82,9 +81,7 @@ const login = async () => {
 window.login = login;
 
 //^ USER DASHBOARD
-if (
-  window.location.href === "http://127.0.0.1:5500/frontend/user-dashboard.html"
-) {
+if (window.location.href === "./user-dashboard.html") {
   const overviewTasksDisplay = () => {
     pageTitle.textContent = "Overview";
     overview.style.display = "block";
@@ -119,7 +116,7 @@ if (
     const token = localStorage.getItem("token");
 
     if (!token) {
-      window.location.href = "http://127.0.0.1:5500/frontend/login.html";
+      window.location.href = "./login.html";
       return;
     }
 
@@ -434,7 +431,7 @@ if (
   //& Logout function
   const logout = () => {
     localStorage.removeItem("token"); // Clear the token
-    window.location.href = "http://127.0.0.1:5500/frontend/login.html"; // Redirect to login page
+    window.location.href = "./login.html"; // Redirect to login page
   };
 
   // Attach logout functionality to the logout div

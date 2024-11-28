@@ -126,7 +126,7 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
           /* data.message || */ "Congratulations! Registration is successful",
       });
       setTimeout(() => {
-        window.location.href = "http://127.0.0.1:5500/frontend/login.html";
+        window.location.href = "./login.html";
       }, 5000);
     } else {
       // Handle errors (status outside the range 200-299)
@@ -160,7 +160,7 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
       } else {
         // Set timeout of 5 seconds to redirect user to the login page
         setTimeout(() => {
-          window.location.href = "http://127.0.0.1:5500/frontend/login.html";
+          window.location.href = "./login.html";
         }, 5000);
       }
     }
