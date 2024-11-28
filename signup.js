@@ -105,17 +105,20 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
 
   // Submit the form via fetch
   try {
-    const response = await fetch("http://localhost:3000/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        email,
-        password,
-      }),
-    });
+    const response = await fetch(
+      "https://task-master-backend-gpe8.onrender.com/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+      }
+    );
 
     if (response.ok) {
       // Check if the response is successful (status in the range 200-299)
