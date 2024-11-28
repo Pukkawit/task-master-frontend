@@ -245,3 +245,17 @@ export const alertModal = ({
     overLay.remove(); // Remove overlay after action
   });
 };
+
+export const getArticle = (word) => {
+  // Convert word to lowercase for uniformity
+  const lowercaseWord = word.toLowerCase();
+
+  // Check the first letter of the word
+  const firstLetter = lowercaseWord.charAt(0);
+
+  // List of vowels
+  const vowels = ["a", "e", "i", "o", "u"];
+
+  // If the first letter is a vowel, return 'an', otherwise return 'a'
+  return vowels.includes(firstLetter) ? "an" : "a";
+};

@@ -4,10 +4,11 @@ import {
   confirmModal,
   toTitleCase,
   greetBasedOnTime,
+  getArticle,
 } from "./myModules.js";
 
 const token = localStorage.getItem("token");
-const API_URL = "http://localhost:3000";
+const API_URL = "https://task-master-backend-gpe8.onrender.com";
 
 const overviewTab = document.querySelector(".overview");
 const createTab = document.querySelector(".create");
@@ -55,13 +56,16 @@ const login = async () => {
   const password = document.getElementById("password").value;
 
   try {
-    const response = await fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ emailOrUsername, password }),
-    });
+    const response = await fetch(
+      "https://task-master-backend-gpe8.onrender.com/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ emailOrUsername, password }),
+      }
+    );
 
     const data = await response.json();
 
@@ -70,11 +74,17 @@ const login = async () => {
       localStorage.setItem("token", data.token); // Store token in localStorage
       window.location.href = "./user-dashboard.html"; // Redirect
     } else {
-      alert(data.message || "Login failed. Please try again.");
+      toastNotification({
+        toastTitle: "Error",
+        toastNotificationText: `${data.message} || Login failed. Please try again.`,
+      });
     }
   } catch (error) {
     console.error("Error during login:", error);
-    alert("An error occurred. Please try again later.");
+    toastNotification({
+      toastTitle: "Error",
+      toastNotificationText: "An error occurred. Please try again later.",
+    });
   }
 };
 // Attach the function to the global `window` object explicitly
@@ -137,13 +147,16 @@ if (window.location.href === "./user-dashboard.html") {
     const token = localStorage.getItem("token"); // Retrieve the token from storage
 
     try {
-      const response = await fetch(`http://localhost:3000/tasks/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://task-master-backend-gpe8.onrender.com/tasks/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         alertModal({
@@ -157,11 +170,29 @@ if (window.location.href === "./user-dashboard.html") {
         /* getTasks(); */
       } else {
         const errorData = await response.json();
-        alert(`Failed to delete task: ${errorData.message}`);
+
+        // Show an alert modal with the error message
+        alertModal({
+          actionName: title,
+          alertTitle: "Error",
+          mainText: "could not be",
+          actionVerb: "deleted",
+          actionFunction: () => getTasks(),
+        });
+        console.error(`Failed to delete task: ${errorData.message}`);
+        /*   alert(`Failed to delete task: ${errorData.message}`); */
       }
     } catch (error) {
       console.error("Error deleting task:", error);
-      alert("An error occurred. Please try again.");
+
+      alertModal({
+        actionName: title,
+        alertTitle: "Error",
+        mainText: "could not be",
+        actionVerb: "deleted",
+        actionFunction: () => getTasks(),
+      });
+      /*    alert("An error occurred. Please try again."); */
     }
   };
 
@@ -170,13 +201,16 @@ if (window.location.href === "./user-dashboard.html") {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://task-master-backend-gpe8.onrender.com/tasks",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -187,6 +221,11 @@ if (window.location.href === "./user-dashboard.html") {
       displayTasks(tasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
+      toastNotification({
+        toastTitle: "Error",
+        toastNotificationText:
+          "Failed to fetch tasks. Check your token or network.",
+      });
       /* alert("Failed to fetch tasks. Check your token or network."); */
     }
   };
@@ -320,14 +359,17 @@ if (window.location.href === "./user-dashboard.html") {
       };
 
       try {
-        const response = await fetch(`http://localhost:3000/tasks/${id}`, {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedTask),
-        });
+        const response = await fetch(
+          `https://task-master-backend-gpe8.onrender.com/tasks/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedTask),
+          }
+        );
 
         if (response.ok) {
           const updatedTaskData = await response.json();
@@ -341,11 +383,23 @@ if (window.location.href === "./user-dashboard.html") {
           overviewTasksDisplay();
         } else {
           const errorData = await response.json();
-          alert(`Failed to update task: ${errorData.message}`);
+          console.log(errorData.message);
+          alertModal({
+            alertTitle: "Error",
+            actionName: updatedTask.title,
+            actionFunction: () => getTasks,
+            actionVerb: "updated",
+            mainText: "but",
+            secondaryText: "failed to update",
+          });
+          /*    alert(`Failed to update task: ${errorData.message}`); */
         }
       } catch (error) {
         console.error("Error updating task:", error);
-        alert("An error occurred. Please try again.");
+        toastNotification({
+          toastTitle: "Error",
+          toastNotificationText: "Failed to update task. Check your network.",
+        });
       }
     };
   };
@@ -532,7 +586,7 @@ if (window.location.href === "./user-dashboard.html") {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `http://localhost:3000/tasks/filter?priority=${priority}`,
+                `https://task-master-backend-gpe8.onrender.com/tasks/filter?priority=${priority}`,
                 {
                   method: "GET",
                   headers: {
@@ -544,7 +598,12 @@ if (window.location.href === "./user-dashboard.html") {
 
               if (!response.ok) {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
+
+                toastNotification({
+                  toastTitle: "Error",
+                  toastNotificationText: `Error: ${errorData.message}`,
+                });
+
                 return;
               }
 
@@ -562,10 +621,18 @@ if (window.location.href === "./user-dashboard.html") {
               }
             } catch (error) {
               console.error("Error fetching tasks' by Due dates :", error);
-              alert("An error occurred. Please try again later.");
+
+              toastNotification({
+                toastTitle: "Error",
+                toastNotificationText:
+                  "An error occurred. Please try again later.",
+              });
             }
           } else {
-            alert("Please enter a priority.");
+            toastNotification({
+              toastTitle: "Error",
+              toastNotificationText: "There is an error",
+            });
           }
         });
       } else {
@@ -667,7 +734,7 @@ if (window.location.href === "./user-dashboard.html") {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `http://localhost:3000/tasks/filter?status=${status}`,
+                `https://task-master-backend-gpe8.onrender.com/tasks/filter?status=${status}`,
                 {
                   method: "GET",
                   headers: {
@@ -679,23 +746,39 @@ if (window.location.href === "./user-dashboard.html") {
 
               if (!response.ok) {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
+                toastNotification({
+                  toastTitle: "Error",
+                  toastNotificationText: `Error: ${errorData.message}`,
+                });
+
                 return;
               }
 
               // Parse the response JSON
               const tasks = await response.json();
               if (tasks.length === 0) {
-                tasksList.innerHTML = "<p>No completed tasks found.</p>";
+                alertModal({
+                  alertTitle: "Oops!",
+                  mainText: `There is no task with "${getArticle(
+                    status
+                  )}" status`,
+                  actionFunction: () => getTasks(),
+                });
               } else {
                 displayTasks(tasks);
               }
             } catch (error) {
               console.error("Error fetching tasks' by Due dates :", error);
-              alert("An error occurred. Please try again later.");
+              toastNotification({
+                toastTitle: "Error",
+                toastNotificationText: `An error occurred. Please try again later.`,
+              });
             }
           } else {
-            alert("Please enter a status.");
+            toastNotification({
+              toastTitle: "Error",
+              toastNotificationText: `Please select status`,
+            });
           }
         });
       } else {
@@ -781,7 +864,7 @@ if (window.location.href === "./user-dashboard.html") {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `http://localhost:3000/tasks/filter?due_date=${dueDate}`,
+                `https://task-master-backend-gpe8.onrender.com/tasks/filter?due_date=${dueDate}`,
                 {
                   method: "GET",
                   headers: {
@@ -793,7 +876,11 @@ if (window.location.href === "./user-dashboard.html") {
 
               if (!response.ok) {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
+                toastNotification({
+                  toastTitle: "Error",
+                  toastNotificationText: `Error: ${errorData.message}`,
+                });
+
                 return;
               }
 
@@ -801,16 +888,25 @@ if (window.location.href === "./user-dashboard.html") {
               const tasks = await response.json();
 
               if (tasks.length === 0) {
-                tasksList.innerHTML = "<p>No completed tasks found.</p>";
+                alertModal({
+                  alertTitle: "Oop! There is no completed tasks found.",
+                });
               } else {
                 displayTasks(tasks);
               }
             } catch (error) {
               console.error("Error fetching tasks' by Due dates :", error);
-              alert("An error occurred. Please try again later.");
+              toastNotification({
+                toastTitle: "Error",
+                toastNotificationText:
+                  "An error occurred. Please try again later.",
+              });
             }
           } else {
-            alert("Please enter a Due Date.");
+            toastNotification({
+              toastTitle: "Error",
+              toastNotificationText: "Please set a new date",
+            });
           }
         });
       } else {
@@ -857,7 +953,7 @@ if (window.location.href === "./user-dashboard.html") {
         try {
           // Make the request to the backend to filter tasks with status "completed"
           const response = await fetch(
-            "http://localhost:3000/tasks/filter?status=completed",
+            "https://task-master-backend-gpe8.onrender.com/tasks/filter?status=completed",
             {
               method: "GET",
               headers: {
@@ -869,7 +965,11 @@ if (window.location.href === "./user-dashboard.html") {
 
           if (!response.ok) {
             const errorData = await response.json();
-            alert(`Error: ${errorData.message}`);
+            toastNotification({
+              toastTitle: "Error",
+              toastNotificationText: `Error: ${errorData.message}`,
+            });
+
             return;
           }
 
@@ -882,7 +982,10 @@ if (window.location.href === "./user-dashboard.html") {
           }
         } catch (error) {
           console.error("Error fetching completed tasks:", error);
-          alert("An error occurred. Please try again later.");
+          toastNotification({
+            toastTitle: "Error",
+            toastNotificationText: "An error occurred. Please try again later.",
+          });
         }
       } else {
         console.log("Date input already exists.");
@@ -923,7 +1026,7 @@ if (window.location.href === "./user-dashboard.html") {
       try {
         // Make the request to the backend to filter tasks with the provided searchedKeyword
         const response = await fetch(
-          `http://localhost:3000/tasks/search?keyword=${encodeURIComponent(
+          `https://task-master-backend-gpe8.onrender.com/tasks/search?keyword=${encodeURIComponent(
             searchedKeyword
           )}`,
           {
@@ -957,7 +1060,7 @@ if (window.location.href === "./user-dashboard.html") {
         if (tasks.length === 0) {
           alertModal({
             alertTitle: "Oops!",
-            mainText: `There are no tasks with the keyword: "${searchedKeyword}"`,
+            mainText: `There are no task with the keyword: "${searchedKeyword}"`,
             actionFunction: () => getTasks(),
           });
         } else {
