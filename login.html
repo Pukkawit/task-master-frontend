@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskMaster</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <a href="./index.html">
+          <div class="logo">TaskMaster</div>
+        </a>
+        <div class="contact-us">
+          <a
+            href="https://wa.link/8ldpjn"
+            rel="noopener"
+            target="_blank"
+            class="btn contact-us-btn"
+            >Contact Us</a
+          >
+        </div>
+      </header>
+      <div class="section login-section">
+        <div class="login-signup-img left-section">
+          <img src="./images/taksManager2.jpg" alt="" srcset="" />
+        </div>
+        <div class="login-signup right-section">
+          <h1 class="other-pages-heading1 login-signup-heading">Login</h1>
+          <div class="form-field">
+            <div class="back-btn">&#8592;</div>
+            <a href="/frontend/index.html">
+              <div class="close-btn">&#215;</div>
+            </a>
+            <form id="loginForm" onsubmit="event.preventDefault(); login();">
+              <input
+                type="text"
+                id="emailOrUsername"
+                placeholder="Username or Email Address"
+              />
+              <input type="password" id="password" placeholder="Password" />
+              <button type="submit" class="login-page">Login</button>
+            </form>
+            <small class="next-step"
+              >Don't have an account?
+              <span><a href="./signup.html">Sign Up</a></span></small
+            >
+          </div>
+        </div>
+      </div>
+      <footer>
+        <p>
+          Designed by Witty Umosung @ November 2024 - <span id="year"></span>
+        </p>
+      </footer>
+    </div>
+
+    <script type="module" defer src="./dashboard.js"></script>
+    <script type="module" src="./login.js"></script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
