@@ -121,13 +121,20 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
     );
 
     if (response.ok) {
-      // Check if the response is successful (status in the range 200-299)
+      // If the response is successful (status 200-299)
       const data = await response.json();
       toastNotification({
         toastTitle: "Success",
         toastNotificationText:
-          /* data.message || */ "Congratulations! Registration is successful",
+          data.message || "Congratulations! Registration is successful",
       });
+
+      // Reset form fields on success
+      document.getElementById("username").value = "";
+      document.getElementById("email").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("confirmPassword").value = "";
+
       setTimeout(() => {
         window.location.href = "./login.html";
       }, 5000);
@@ -150,30 +157,21 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
         toastNotificationText: `Registration is unsuccessful because ${errorMessage}`,
       });
 
-      /* Clear in the input fields */
+      /* // Clear input fields regardless of the outcome
       usernameField.value = "";
       emailField.value = "";
       passwordField.value = "";
-      confirmPasswordField.value = "";
+      confirmPasswordField.value = ""; */
 
-      // Optionally, set timeout to redirect user only on specific errors if needed
+      // Optional redirection logic for specific status codes
       if (response.status === 409) {
-        // Handle a redirect or take a specific action for this specific error
-        // Example: setTimeout(() => { /* your action here */ }, 5000);
+        // Handle a redirect or specific action for this error if needed
       } else {
         // Set timeout of 5 seconds to redirect user to the login page
         setTimeout(() => {
           window.location.href = "./login.html";
         }, 5000);
       }
-    }
-
-    if (response.ok) {
-      // Reset form fields on success
-      document.getElementById("username").value = "";
-      document.getElementById("email").value = "";
-      document.getElementById("password").value = "";
-      document.getElementById("confirmPassword").value = "";
     }
   } catch (error) {
     console.error("Error during registration:", error);
