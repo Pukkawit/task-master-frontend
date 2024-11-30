@@ -5,6 +5,7 @@ import {
   toTitleCase,
   greetBasedOnTime,
   getArticle,
+  toTitleCaseSentence,
 } from "./myModules.js";
 
 const token = localStorage.getItem("token");
@@ -255,7 +256,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
 
       // Create and populate task elements
       const title = document.createElement("h3");
-      title.textContent = toTitleCase(task.title) ?? "No Title"; // Default text if title is undefined
+      title.textContent = toTitleCaseSentence(task.title) ?? "No Title"; // Default text if title is undefined
 
       const description = document.createElement("p");
       const descriptionStrong = document.createElement("strong");
