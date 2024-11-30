@@ -1,6 +1,29 @@
-import { toastNotification } from "./myModules.js";
+import {
+  toastNotification,
+  togglePasswordVisibility,
+  toggleConfirmPasswordVisibility,
+} from "./myModules.js";
 document.querySelector(".back-btn").addEventListener("click", () => {
   window.history.back();
+});
+
+//~ Hide or show password and confirm password
+/* Hide or Show Password */
+document.addEventListener("DOMContentLoaded", () => {
+  togglePasswordVisibility({
+    passwordInputID: "password",
+    hidePasswordIconID: "hidePassword",
+    revealPasswordIconID: "revealPassword",
+    passwordToggleIconID: "passwordToggleIcon",
+  });
+
+  /* Hide or show confirm password */
+  toggleConfirmPasswordVisibility({
+    passwordConfirmInputID: "confirmPassword",
+    hideConfirmPasswordIconID: "hideConfirmPassword",
+    revealConfirmPasswordIconID: "revealConfirmPassword",
+    passwordConfirmToggleIconID: "passwordConfirmToggleIcon",
+  });
 });
 
 const passwordField = document.getElementById("password");

@@ -201,7 +201,6 @@ a {
     font-size: 28px;
   }
 }
-
 .dashboard-content {
   display: flex;
   width: 100%;
@@ -366,6 +365,7 @@ header {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   column-gap: 3rem;
   padding-inline: 80px;
   height: 100vh;
@@ -376,8 +376,7 @@ header {
   padding: 40px 80px;
 }
 .hero,
-main,
-.login-signup {
+main {
   flex: 1;
 }
 main {
@@ -397,36 +396,12 @@ main h1 {
 .right-section {
   flex: 1;
 }
+
 .hero-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 12px;
-}
-
-.login-signup-img {
-  display: grid;
-  place-content: center;
-  width: 500px;
-  height: 500px;
-  border-radius: 12px;
-  object-fit: cover;
-  overflow: hidden;
-  align-self: center;
-}
-
-.login-signup-img img {
-  height: 100%;
-  width: 100%;
-  /* flip image */
-  transform: scaleX(-1);
-}
-.login-section {
-  flex-direction: row-reverse;
-
-  img {
-    transform: scaleX(+1);
-  }
 }
 
 .hero-img img {
@@ -459,6 +434,7 @@ main h1 {
 .login-signup-heading {
   color: var(--primary-color-shade-variance);
   margin-bottom: 40px;
+  text-align: center;
 }
 .hero-description {
   font-size: 18px;
@@ -472,16 +448,44 @@ main h1 {
   align-items: center;
   column-gap: 16px;
 }
+.login-signup-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+.login-section {
+  flex-direction: row-reverse;
+  img {
+    transform: scaleX(+1);
+  }
+}
+.login-signup-img {
+  width: 80%;
+  height: 80%;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.login-signup-img > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  /* flip image */
+  transform: scaleX(-1);
+}
 
 .login-signup {
-  display: grid;
   width: 100%;
-  height: 100%;
-  place-content: center;
+  max-width: 450px;
+  align-self: center;
 }
-.login-signup h1 {
-  text-align: center;
-}
+
 .next-step {
   margin-top: 20px;
   color: var(--accent-color);
@@ -490,7 +494,7 @@ main h1 {
 .form-field {
   position: relative;
   min-height: 250px;
-  max-width: 450px;
+  width: 100%;
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -506,6 +510,10 @@ main h1 {
 .form-field-col-2 {
   display: flex;
   column-gap: 20px;
+}
+
+form {
+  width: 100%;
 }
 
 .close-btn {
@@ -538,10 +546,6 @@ main h1 {
   font-size: 40px;
   font-weight: bold;
 }
-#login,
-#signup {
-  text-align: center;
-}
 
 .error-message {
   font-size: 12px;
@@ -560,6 +564,42 @@ select {
   border-radius: 8px;
   margin-bottom: 20px;
   outline: none;
+}
+.password-input {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.reveal-close {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  background-color: #e7e7e7;
+  border-radius: 4px;
+  padding: 10px;
+  display: grid;
+  place-items: center;
+  color: var(--accent-color);
+}
+
+.reveal-close i {
+  height: 40px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 14px;
+}
+
+.reveal-close i:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 textarea {

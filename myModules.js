@@ -275,3 +275,112 @@ export const formatDate = (date) => {
   const formattedDate = `${day} ${month} ${year}`;
   return formattedDate;
 };
+
+export const togglePasswordVisibility = ({
+  passwordInputID,
+  hidePasswordIconID,
+  revealPasswordIconID,
+  passwordToggleIconID,
+}) => {
+  const passwordInput = document.getElementById(passwordInputID);
+  const hidePasswordIcon = document.getElementById(hidePasswordIconID);
+  const revealPasswordIcon = document.getElementById(revealPasswordIconID);
+  const passwordToggleIcon = document.getElementById(passwordToggleIconID);
+
+  // Initialize the toggle icon state
+  hidePasswordIcon.style.opacity = "1"; // Show hide icon
+  revealPasswordIcon.style.opacity = "0"; // Hide reveal icon
+
+  // Password toggle event listener
+  if (!passwordToggleIcon.dataset.listenerAdded) {
+    passwordToggleIcon.dataset.listenerAdded = true;
+
+    passwordToggleIcon.addEventListener("click", () => {
+      console.log("Password toggle clicked"); // Debugging statement
+
+      // Determine visibility state
+      const isPasswordVisible = passwordInput.type === "text";
+
+      // Toggle password visibility
+      passwordInput.type = isPasswordVisible ? "password" : "text";
+
+      // Toggle icon visibility
+      hidePasswordIcon.style.opacity = isPasswordVisible ? "1" : "0"; // Show/Hide eye slash icon
+      revealPasswordIcon.style.opacity = isPasswordVisible ? "0" : "1"; // Show/Hide reveal icon
+    });
+  }
+};
+
+export const toggleConfirmPasswordVisibility = ({
+  passwordConfirmInputID,
+  hideConfirmPasswordIconID,
+  revealConfirmPasswordIconID,
+  passwordConfirmToggleIconID,
+}) => {
+  const passwordConfirmInput = document.getElementById(passwordConfirmInputID);
+  const hideConfirmPasswordIcon = document.getElementById(
+    hideConfirmPasswordIconID
+  );
+  const revealConfirmPasswordIcon = document.getElementById(
+    revealConfirmPasswordIconID
+  );
+  const passwordConfirmToggleIcon = document.getElementById(
+    passwordConfirmToggleIconID
+  );
+
+  // Initialize the toggle icon state
+  hideConfirmPasswordIcon.style.opacity = "1"; // Show hide icon
+  revealConfirmPasswordIcon.style.opacity = "0"; // Hide reveal icon
+
+  // Confirm password toggle event listener
+  if (!passwordConfirmToggleIcon.dataset.listenerAdded) {
+    passwordConfirmToggleIcon.dataset.listenerAdded = true;
+
+    passwordConfirmToggleIcon.addEventListener("click", () => {
+      console.log("Confirm password toggle clicked"); // Debugging statement
+
+      // Determine visibility state
+      const isConfirmPasswordVisible = passwordConfirmInput.type === "text";
+
+      // Toggle confirm password visibility
+      passwordConfirmInput.type = isConfirmPasswordVisible
+        ? "password"
+        : "text";
+
+      // Toggle icon visibility
+      hideConfirmPasswordIcon.style.opacity = isConfirmPasswordVisible
+        ? "1"
+        : "0"; // Show/Hide eye slash icon
+      revealConfirmPasswordIcon.style.opacity = isConfirmPasswordVisible
+        ? "0"
+        : "1"; // Show/Hide reveal icon
+    });
+  }
+};
+
+// Usage in the Login Page
+document.addEventListener("DOMContentLoaded", () => {
+  togglePasswordVisibility({
+    passwordInputID: "password",
+    hidePasswordIconID: "hidePassword",
+    revealPasswordIconID: "revealPassword",
+    passwordToggleIconID: "passwordToggleIcon",
+  });
+});
+
+// Usage in the Signup Page
+document.addEventListener("DOMContentLoaded", () => {
+  togglePasswordVisibility({
+    passwordInputID: "password",
+    hidePasswordIconID: "hidePassword",
+    revealPasswordIconID: "revealPassword",
+    passwordToggleIconID: "passwordToggleIcon",
+  });
+
+  toggleConfirmPasswordVisibility({
+    passwordConfirmInputID: "confirmPassword",
+    hideConfirmPasswordIconID: "hideConfirmPassword",
+    revealConfirmPasswordIconID: "revealConfirmPassword",
+    passwordConfirmToggleIconID: "passwordConfirmToggleIcon",
+  });
+});

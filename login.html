@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TaskMaster</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -22,11 +29,11 @@
           >
         </div>
       </header>
-      <div class="section login-section">
-        <div class="login-signup-img left-section">
+      <div class="login-section login-signup-section section">
+        <div class="login-signup-img">
           <img src="./images/taksManager2.jpg" alt="" srcset="" />
         </div>
-        <div class="login-signup right-section">
+        <div class="login-signup">
           <h1 class="other-pages-heading1 login-signup-heading">Login</h1>
           <div class="form-field">
             <div class="back-btn">&#8592;</div>
@@ -38,10 +45,23 @@
                 type="text"
                 id="emailOrUsername"
                 placeholder="Username or Email Address"
+                required
               />
-              <input type="password" id="password" placeholder="Password" />
+              <div class="password-input">
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Password"
+                  required
+                />
+                <div class="reveal-close" id="passwordToggleIcon">
+                  <i class="fa fa-eye" id="hidePassword"></i>
+                  <i id="revealPassword" class="fa fa-eye-slash"></i>
+                </div>
+              </div>
               <button type="submit" class="login-page">Login</button>
             </form>
+
             <small class="next-step"
               >Don't have an account?
               <span><a href="./signup.html">Sign Up</a></span></small
@@ -56,8 +76,8 @@
       </footer>
     </div>
 
-    <script type="module" defer src="./dashboard.js"></script>
     <script type="module" src="./login.js"></script>
+    <script type="module" defer src="./dashboard.js"></script>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

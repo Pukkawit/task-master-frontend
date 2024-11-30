@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TaskMaster</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+      integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
@@ -22,8 +29,8 @@
           >
         </div>
       </header>
-      <div class="section">
-        <div class="login-signup-img left-section">
+      <div class="login-signup-section section">
+        <div class="login-signup-img">
           <img src="./images/taksManager3.jpg" alt="" srcset="" />
         </div>
         <div class="login-signup">
@@ -38,13 +45,31 @@
               <div id="usernameError" class="error-message"></div>
               <input type="text" id="email" placeholder="Email address" />
               <div id="emailError" class="error-message"></div>
-              <input type="password" id="password" placeholder="Password" />
+              <div class="password-input">
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Password"
+                  required
+                />
+                <div class="reveal-close" id="passwordToggleIcon">
+                  <i class="fa fa-eye" id="hidePassword"></i>
+                  <i id="revealPassword" class="fa fa-eye-slash"></i>
+                </div>
+              </div>
               <div id="passwordError" class="error-message"></div>
-              <input
-                type="password"
-                id="confirmPassword"
-                placeholder="Confirm Password"
-              />
+              <div class="password-input">
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Confirm Password"
+                  required
+                />
+                <div class="reveal-close" id="passwordConfirmToggleIcon">
+                  <i class="fa fa-eye" id="hideConfirmPassword"></i>
+                  <i id="revealConfirmPassword" class="fa fa-eye-slash"></i>
+                </div>
+              </div>
               <div id="confirmPasswordError" class="error-message"></div>
               <button type="button" id="signupButton">Sign Up</button>
             </form>
