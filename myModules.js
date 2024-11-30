@@ -259,3 +259,19 @@ export const getArticle = (word) => {
   // If the first letter is a vowel, return 'an', otherwise return 'a'
   return vowels.includes(firstLetter) ? "an" : "a";
 };
+
+export const formatDate = (date) => {
+  const completeDate = new Date(date);
+
+  // Validate the date
+  if (isNaN(completeDate.getTime())) {
+    throw new Error("Invalid date");
+  }
+
+  const day = completeDate.getDate().toString().padStart(2, "0"); // Pad single digits
+  const month = completeDate.toLocaleString("en-US", { month: "short" }); // Another property is long. e.g. short is Dec, long is December
+  const year = completeDate.getFullYear();
+
+  const formattedDate = `${day} ${month} ${year}`;
+  return formattedDate;
+};
