@@ -128,7 +128,7 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
     return; // Exit if validation fails
   }
 
-  const API_BASE = "http://localhost:3000";
+  const API_BASE = process.env.BASE_URL || "http://localhost:3000";
 
   // Submit the form via fetch
   try {
