@@ -1,3 +1,5 @@
+/* ./frontend/dashboard.js */
+
 import {
   toastNotification,
   alertModal,
@@ -9,7 +11,7 @@ import {
 } from "./myModules.js";
 
 const token = localStorage.getItem("token");
-const API_URL = "https://task-master-backend-gpe8.onrender.com";
+const API_URL = "http://localhost:3000";
 
 const overviewTab = document.querySelector(".overview");
 const createTab = document.querySelector(".create");
@@ -57,16 +59,13 @@ const login = async () => {
   const password = document.getElementById("password").value;
 
   try {
-    const response = await fetch(
-      "https://task-master-backend-gpe8.onrender.com/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ emailOrUsername, password }),
-      }
-    );
+    const response = await fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ emailOrUsername, password }),
+    });
 
     const data = await response.json();
 
@@ -148,16 +147,13 @@ if (window.location.href.includes("/user-dashboard.html")) {
     const token = localStorage.getItem("token"); // Retrieve the token from storage
 
     try {
-      const response = await fetch(
-        `https://task-master-backend-gpe8.onrender.com/tasks/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response.ok) {
         alertModal({
@@ -202,16 +198,13 @@ if (window.location.href.includes("/user-dashboard.html")) {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(
-        "https://task-master-backend-gpe8.onrender.com/tasks",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -360,17 +353,14 @@ if (window.location.href.includes("/user-dashboard.html")) {
       };
 
       try {
-        const response = await fetch(
-          `https://task-master-backend-gpe8.onrender.com/tasks/${id}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedTask),
-          }
-        );
+        const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedTask),
+        });
 
         if (response.ok) {
           const updatedTaskData = await response.json();
@@ -587,7 +577,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `https://task-master-backend-gpe8.onrender.com/tasks/filter?priority=${priority}`,
+                `http://localhost:3000/tasks/filter?priority=${priority}`,
                 {
                   method: "GET",
                   headers: {
@@ -735,7 +725,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `https://task-master-backend-gpe8.onrender.com/tasks/filter?status=${status}`,
+                `http://localhost:3000/tasks/filter?status=${status}`,
                 {
                   method: "GET",
                   headers: {
@@ -865,7 +855,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `https://task-master-backend-gpe8.onrender.com/tasks/filter?due_date=${dueDate}`,
+                `http://localhost:3000/tasks/filter?due_date=${dueDate}`,
                 {
                   method: "GET",
                   headers: {
@@ -954,7 +944,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
         try {
           // Make the request to the backend to filter tasks with status "completed"
           const response = await fetch(
-            "https://task-master-backend-gpe8.onrender.com/tasks/filter?status=completed",
+            "http://localhost:3000/tasks/filter?status=completed",
             {
               method: "GET",
               headers: {
@@ -1027,7 +1017,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
       try {
         // Make the request to the backend to filter tasks with the provided searchedKeyword
         const response = await fetch(
-          `https://task-master-backend-gpe8.onrender.com/tasks/search?keyword=${encodeURIComponent(
+          `http://localhost:3000/tasks/search?keyword=${encodeURIComponent(
             searchedKeyword
           )}`,
           {

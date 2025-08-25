@@ -1,3 +1,5 @@
+/* .frontend/signup.js */
+
 import {
   toastNotification,
   togglePasswordVisibility,
@@ -126,22 +128,21 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
     return; // Exit if validation fails
   }
 
+  const API_BASE = "http://localhost:3000";
+
   // Submit the form via fetch
   try {
-    const response = await fetch(
-      "https://task-master-backend-gpe8.onrender.com/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
-      }
-    );
+    const response = await fetch(`${API_BASE}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+      }),
+    });
 
     if (response.ok) {
       // If the response is successful (status 200-299)

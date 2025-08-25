@@ -1,3 +1,5 @@
+/* ./frontend/myModules.js */
+
 // Get the current year
 export const getCurrentYear = () => {
   const date = new Date();
