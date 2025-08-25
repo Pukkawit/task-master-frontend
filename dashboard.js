@@ -57,11 +57,21 @@ const login = async () => {
   const emailOrUsername = document.getElementById("emailOrUsername").value;
   const password = document.getElementById("password").value;
 
-  const BASE_URL =
-    "https://taskmaster-roan.vercel.app" || "http://localhost:3000";
+  let API_BASE;
+
+  if (
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === "localhost"
+  ) {
+    // Local dev
+    API_BASE = "https://apvuyqcvxtmncdivszts.supabase.co/functions/v1"; // or wherever your backend runs locally
+  } else {
+    // Production (Supabase Edge Function)
+    API_BASE = "https://apvuyqcvxtmncdivszts.supabase.co/functions/v1";
+  }
 
   try {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${API_BASE}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -149,7 +159,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
     const token = localStorage.getItem("token"); // Retrieve the token from storage
 
     try {
-      const response = await fetch(`${BASE_URL}/tasks/${id}`, {
+      const response = await fetch(`${API_BASE}/tasks/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -200,7 +210,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`${BASE_URL}/tasks`, {
+      const response = await fetch(`${API_BASE}/tasks`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -355,7 +365,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
       };
 
       try {
-        const response = await fetch(`${BASE_URL}/tasks/${id}`, {
+        const response = await fetch(`${API_BASE}/tasks/${id}`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -428,7 +438,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
     const deadline = document.getElementById("task-deadline").value;
 
     try {
-      const response = await fetch(`${BASE_URL}/tasks`, {
+      const response = await fetch(`${API_BASE}/tasks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -579,7 +589,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `${BASE_URL}/tasks/filter?priority=${priority}`,
+                `${API_BASE}/tasks/filter?priority=${priority}`,
                 {
                   method: "GET",
                   headers: {
@@ -727,7 +737,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `${BASE_URL}/tasks/filter?status=${status}`,
+                `${API_BASE}/tasks/filter?status=${status}`,
                 {
                   method: "GET",
                   headers: {
@@ -857,7 +867,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `${BASE_URL}/tasks/filter?due_date=${dueDate}`,
+                `${API_BASE}/tasks/filter?due_date=${dueDate}`,
                 {
                   method: "GET",
                   headers: {
@@ -946,7 +956,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
         try {
           // Make the request to the backend to filter tasks with status "completed"
           const response = await fetch(
-            `${BASE_URL}/tasks/filter?status=completed`,
+            `${API_BASE}/tasks/filter?status=completed`,
             {
               method: "GET",
               headers: {
@@ -1019,7 +1029,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
       try {
         // Make the request to the backend to filter tasks with the provided searchedKeyword
         const response = await fetch(
-          `${BASE_URL}/tasks/search?keyword=${encodeURIComponent(
+          `${API_BASE}/tasks/search?keyword=${encodeURIComponent(
             searchedKeyword
           )}`,
           {

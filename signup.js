@@ -203,6 +203,8 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
         // Handle a redirect or specific action for this error if needed
       } else if (response.status === 401) {
         return false;
+      } else if (response.status === 500) {
+        return false;
       } else {
         // Set timeout of 5 seconds to redirect user to the login page
         setTimeout(() => {
