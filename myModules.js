@@ -331,11 +331,14 @@ export const toggleConfirmPasswordVisibility = ({
   );
 
   // Initialize the toggle icon state
-  hideConfirmPasswordIcon.style.opacity = "1"; // Show hide icon
-  revealConfirmPasswordIcon.style.opacity = "0"; // Hide reveal icon
+  hideConfirmPasswordIcon && (hideConfirmPasswordIcon.style.opacity = "1"); // Show hide icon
+  revealConfirmPasswordIcon && (revealConfirmPasswordIcon.style.opacity = "0"); // Hide reveal icon
 
   // Confirm password toggle event listener
-  if (!passwordConfirmToggleIcon.dataset.listenerAdded) {
+  if (
+    passwordConfirmToggleIcon &&
+    !passwordConfirmToggleIcon.dataset.listenerAdded
+  ) {
     passwordConfirmToggleIcon.dataset.listenerAdded = true;
 
     passwordConfirmToggleIcon.addEventListener("click", () => {

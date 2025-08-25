@@ -1,4 +1,4 @@
-import { togglePasswordVisibility } from "myModules.js";
+import { togglePasswordVisibility } from "./myModules.js";
 document.querySelector(".back-btn").addEventListener("click", () => {
   window.history.back();
 });

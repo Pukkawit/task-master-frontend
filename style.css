@@ -82,16 +82,6 @@ body {
   color: #ff7f50;
 }
 
-/* Responsive Design */
-@media (max-width: 500px) {
-  .toast-notification {
-    min-width: 90%;
-    left: 5%;
-    right: 5%;
-    bottom: 15px; /* Space from bottom */
-  }
-}
-
 /* Confirm Modal Styling */
 .confirm-modal,
 .alert-modal {
@@ -346,6 +336,19 @@ header {
   width: 100%;
   height: 60px;
   background-color: var(--light-dark-color);
+
+  a {
+    color: var(--accent-color);
+    transition: color 0.2s ease-in-out;
+    display: flex;
+
+    div {
+      &:hover {
+        color: var(--secondary-color);
+        background-color: white;
+      }
+    }
+  }
 }
 .logo {
   color: var(--secondary-color);
@@ -875,4 +878,70 @@ footer {
   padding: 20px;
   font-size: 14px;
   text-align: center;
+
+  p {
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column-reverse;
+    padding-block: 20px;
+    padding-inline: 40px;
+    row-gap: 30px;
+    height: auto;
+  }
+
+  .left-section,
+  .right-section {
+    align-items: center;
+    text-align: center;
+  }
+
+  .dashboard-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .dashboard-container aside {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--light-dark-color);
+  }
+
+  .dashboard-content {
+    height: auto;
+  }
+
+  .form-field {
+    padding: 20px;
+  }
+
+  header {
+    padding: 10px 20px;
+    height: auto;
+    row-gap: 10px;
+  }
+
+  footer {
+    padding: 10px 20px;
+    height: auto;
+    row-gap: 10px;
+
+    p {
+      line-height: 1.5;
+      font-size: 10px;
+    }
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  .toast-notification {
+    min-width: 90%;
+    left: 5%;
+    right: 5%;
+  }
 }

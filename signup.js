@@ -128,7 +128,18 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
     return; // Exit if validation fails
   }
 
-  const API_BASE = "https://taskmaster-roan.vercel.app" || "http://localhost:3000";
+  let API_BASE;
+
+  if (
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === "localhost"
+  ) {
+    // Local dev
+    API_BASE = "https://apvuyqcvxtmncdivszts.supabase.co/functions/v1"; // or wherever your backend runs locally
+  } else {
+    // Production (Supabase Edge Function)
+    API_BASE = "https://apvuyqcvxtmncdivszts.supabase.co/functions/v1";
+  }
 
   // Submit the form via fetch
   try {
@@ -190,6 +201,8 @@ document.getElementById("signupButton").addEventListener("click", async (e) => {
       // Optional redirection logic for specific status codes
       if (response.status === 409) {
         // Handle a redirect or specific action for this error if needed
+      } else if (response.status === 401) {
+        return false;
       } else {
         // Set timeout of 5 seconds to redirect user to the login page
         setTimeout(() => {
