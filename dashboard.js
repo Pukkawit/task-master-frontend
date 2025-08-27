@@ -52,23 +52,23 @@ const loggedInUser = () => {
   }
 };
 
+let API_BASE;
+
+if (
+  window.location.hostname === "127.0.0.1" ||
+  window.location.hostname === "localhost"
+) {
+  // Local dev
+  API_BASE = "https://apvuyqcvxtmncdivszts.supabase.co/functions/v1"; // or wherever your backend runs locally
+} else {
+  // Production (Supabase Edge Function)
+  API_BASE = "https://apvuyqcvxtmncdivszts.supabase.co/functions/v1";
+}
+
 //& Login a User
 const login = async () => {
   const emailOrUsername = document.getElementById("emailOrUsername").value;
   const password = document.getElementById("password").value;
-
-  let API_BASE;
-
-  if (
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname === "localhost"
-  ) {
-    // Local dev
-    API_BASE = "https://apvuyqcvxtmncdivszts.supabase.co/functions/v1"; // or wherever your backend runs locally
-  } else {
-    // Production (Supabase Edge Function)
-    API_BASE = "https://apvuyqcvxtmncdivszts.supabase.co/functions/v1";
-  }
 
   try {
     const response = await fetch(`${API_BASE}/login`, {
@@ -209,8 +209,10 @@ if (window.location.href.includes("/user-dashboard.html")) {
   const getTasks = async () => {
     const token = localStorage.getItem("token");
 
+    console.log("Using token for tasks-get:", token);
+
     try {
-      const response = await fetch(`${API_BASE}/tasks`, {
+      const response = await fetch(`${API_BASE}/tasks-get`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -365,7 +367,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
       };
 
       try {
-        const response = await fetch(`${API_BASE}/tasks/${id}`, {
+        const response = await fetch(`${API_BASE}/tasks-update/${id}`, {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -421,10 +423,12 @@ if (window.location.href.includes("/user-dashboard.html")) {
 
   const user = loggedInUser();
   if (user) {
-    console.log(`Welcome, ${user.username}!`);
-    document.getElementById("loggedInUserName").textContent = user.username;
+    /*  console.log(`Welcome, ${user.username}!`); */
+    document.getElementById("loggedInUserName").textContent =
+      user.username && `${user.username}!`;
   } else {
-    console.log("Please log in.");
+    document.getElementById("loggedInUserName").textContent = "";
+    /* console.log("Please log in."); */
   }
 
   document.getElementById("greetings").textContent = greetBasedOnTime();
@@ -438,7 +442,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
     const deadline = document.getElementById("task-deadline").value;
 
     try {
-      const response = await fetch(`${API_BASE}/tasks`, {
+      const response = await fetch(`${API_BASE}/tasks-create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -493,6 +497,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
 
   // Attach logout functionality to the logout div
   document.getElementById("logout").addEventListener("click", logout);
+  document.querySelector(".logout-button").addEventListener("click", logout);
 
   document.addEventListener("DOMContentLoaded", () => {
     const priorityBtn = document.getElementById("filter-by-priority");

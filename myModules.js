@@ -284,16 +284,28 @@ export const togglePasswordVisibility = ({
   revealPasswordIconID,
   passwordToggleIconID,
 }) => {
+  if (
+    !passwordInputID ||
+    !hidePasswordIconID ||
+    !revealPasswordIconID ||
+    !passwordToggleIconID
+  )
+    return; // ✅ Avoid crash if element not found
   const passwordInput = document.getElementById(passwordInputID);
   const hidePasswordIcon = document.getElementById(hidePasswordIconID);
   const revealPasswordIcon = document.getElementById(revealPasswordIconID);
   const passwordToggleIcon = document.getElementById(passwordToggleIconID);
 
   // Initialize the toggle icon state
-  hidePasswordIcon.style.opacity = "1"; // Show hide icon
-  revealPasswordIcon.style.opacity = "0"; // Hide reveal icon
+  hidePasswordIcon && (hidePasswordIcon.style.opacity = "1"); // Show hide icon
+  revealPasswordIcon && (revealPasswordIcon.style.opacity = "0"); // Hide reveal icon
 
   // Password toggle event listener
+
+  if (!passwordToggleIcon) {
+    return;
+  }
+
   if (!passwordToggleIcon.dataset.listenerAdded) {
     passwordToggleIcon.dataset.listenerAdded = true;
 
