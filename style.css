@@ -200,7 +200,7 @@ a {
 .logout-button {
   display: flex;
   position: absolute;
-  top: 18px;
+  top: 24px;
   right: 28px;
   z-index: 999;
   background-color: #ff3131;
@@ -1008,40 +1008,36 @@ footer {
   }
 
   .filter-div {
-    top: 40px !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    top: -60px !important;
     left: 0px !important;
     width: 100% !important;
-    height: 24px !important;
+    height: auto !important;
 
     .filter-input {
-      border: 1px solid #ccc;
-      border-radius: 4px 0 0 4px;
-      width: 60%;
-      margin-right: 10px;
+      position: relative !important;
+      margin-right: 0px !important;
+      margin-bottom: 0px;
+      width: 100% !important;
+      height: 40px !important;
     }
 
     .filter-search-btn {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 12px 16px !important;
-      border: none;
-      border-radius: 0 4px 4px 0;
-      background-color: var(--primary-color-shade-variance);
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      position: relative !important;
+      padding: 12px 14px !important;
     }
   }
 
   .logout-button {
-    right: 3rem;
+    right: 3.5rem;
   }
 
   .toggle-button {
     display: flex;
     position: absolute;
-    top: 14px;
+    top: 20px;
     right: 14px;
     z-index: 999;
     background-color: #ffffff;
