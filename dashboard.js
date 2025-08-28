@@ -171,7 +171,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
   const getTasks = async () => {
     const token = localStorage.getItem("token");
 
-    console.log("Using token for tasks-get:", token);
+    /*  console.log("Using token for tasks-get:", token); */
 
     try {
       const response = await fetch(`${API_BASE}/tasks-get`, {
@@ -1145,5 +1145,4 @@ if (document.title === "Dashboard - TaskMaster") {
   }
 
   document.getElementById("greetings").textContent = greetBasedOnTime();
-  countTasks();
 }
