@@ -1,5 +1,3 @@
-/* ./frontend/dashboard.js */
-
 import {
   toastNotification,
   alertModal,
@@ -19,38 +17,6 @@ const overview = document.querySelector("#task-list");
 const createTask = document.querySelector("#createTasks");
 const updateTask = document.querySelector("#updateTasks");
 const pageTitle = document.querySelector(".pageTitle");
-
-const loggedInUser = () => {
-  // Retrieve the token from localStorage (or sessionStorage)
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    // If no token is found, user is not logged in
-    console.log("No user is logged in.");
-    return null;
-  }
-
-  try {
-    // Decode the token payload (assuming it's a JWT)
-    const payloadBase64 = token.split(".")[1];
-    const decodedPayload = JSON.parse(atob(payloadBase64));
-
-    // Check if the token is expired
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    if (decodedPayload.exp && decodedPayload.exp < currentTime) {
-      console.log("Token has expired.");
-      localStorage.removeItem("token"); // Clear the expired token
-      return null;
-    }
-
-    // Return the user details from the decoded payload
-    console.log("Logged-in user:", decodedPayload);
-    return decodedPayload;
-  } catch (error) {
-    console.error("Error decoding token:", error);
-    return null;
-  }
-};
 
 let API_BASE;
 
@@ -82,7 +48,7 @@ const login = async () => {
     const data = await response.json();
 
     if (response.ok) {
-      console.log("Login successful:", data.token);
+      /*  console.log("Login successful:", data.token); */
       localStorage.setItem("token", data.token); // Store token in localStorage
       window.location.href = "./user-dashboard.html"; // Redirect
     } else {
@@ -92,7 +58,7 @@ const login = async () => {
       });
     }
   } catch (error) {
-    console.error("Error during login:", error);
+    /*    console.error("Error during login:", error); */
     toastNotification({
       toastTitle: "Error",
       toastNotificationText: "An error occurred. Please try again later.",
@@ -142,7 +108,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
       return;
     }
 
-    console.log("User is authenticated");
+    /* console.log("User is authenticated"); */
   };
   const cancelUpdateTask = document.getElementById("cancel-update-task");
   const cancelCreateTask = document.getElementById("cancel-add-task");
@@ -155,11 +121,13 @@ if (window.location.href.includes("/user-dashboard.html")) {
   });
 
   //& Delete Tasks
-  const deleteTask = async (id, title) => {
-    const token = localStorage.getItem("token"); // Retrieve the token from storage
+  // In deleteTask
+  const deleteTask = async (id) => {
+    const token = localStorage.getItem("token");
+    let deletedTitle = "Task"; // ✅ define globally in scope
 
     try {
-      const response = await fetch(`${API_BASE}/tasks/${id}`, {
+      const response = await fetch(`${API_BASE}/tasks-delete/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -167,41 +135,34 @@ if (window.location.href.includes("/user-dashboard.html")) {
         },
       });
 
+      const result = await response.json();
+      deletedTitle = result.deleted?.title || deletedTitle; // ✅ safe overwrite
+
       if (response.ok) {
         alertModal({
-          actionName: title,
+          actionName: deletedTitle,
           alertTitle: "Success",
           mainText: "has been successfully",
           actionVerb: "deleted",
           actionFunction: () => getTasks(),
         });
-        // Refresh the task list after deletion
-        /* getTasks(); */
       } else {
-        const errorData = await response.json();
-
-        // Show an alert modal with the error message
         alertModal({
-          actionName: title,
+          actionName: deletedTitle, // ✅ always defined now
           alertTitle: "Error",
           mainText: "could not be",
           actionVerb: "deleted",
           actionFunction: () => getTasks(),
         });
-        console.error(`Failed to delete task: ${errorData.message}`);
-        /*   alert(`Failed to delete task: ${errorData.message}`); */
       }
     } catch (error) {
-      console.error("Error deleting task:", error);
-
       alertModal({
-        actionName: title,
+        actionName: deletedTitle, // ✅ safe here too
         alertTitle: "Error",
         mainText: "could not be",
         actionVerb: "deleted",
         actionFunction: () => getTasks(),
       });
-      /*    alert("An error occurred. Please try again."); */
     }
   };
 
@@ -225,10 +186,10 @@ if (window.location.href.includes("/user-dashboard.html")) {
       }
 
       const tasks = await response.json();
-      console.log("Fetched tasks:", tasks);
+      /*  console.log("Fetched tasks:", tasks); */
       displayTasks(tasks);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      /*  console.error("Error fetching tasks:", error); */
       toastNotification({
         toastTitle: "Error",
         toastNotificationText:
@@ -237,6 +198,62 @@ if (window.location.href.includes("/user-dashboard.html")) {
       /* alert("Failed to fetch tasks. Check your token or network."); */
     }
   };
+
+  //& Count Tasks
+  const countTasks = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`${API_BASE}/tasks-get`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const tasks = await response.json();
+      /*  console.log("Fetched tasks for counting:", tasks); */
+
+      // Calculate counts
+      const totalTasks = tasks.length;
+      const completedTasks = tasks.filter(
+        (task) => task.status === "completed"
+      ).length;
+      const pendingTasks = tasks.filter(
+        (task) => task.status === "pending"
+      ).length;
+      const inProgressTasks = tasks.filter(
+        (task) => task.status === "in-progress"
+      ).length;
+      const overdueTasks = tasks.filter((task) => {
+        const deadline = new Date(task.deadline);
+        const now = new Date();
+        return deadline < now && task.status !== "completed";
+      }).length;
+
+      // Update the DOM
+      document.getElementById("total-tasks").textContent = totalTasks;
+      document.getElementById("completed-tasks").textContent = completedTasks;
+      document.getElementById("pending-tasks").textContent = pendingTasks;
+      document.getElementById("in-progress-tasks").textContent =
+        inProgressTasks;
+      document.getElementById("overdue-tasks").textContent = overdueTasks;
+    } catch (error) {
+      /*  console.error("Error fetching tasks for counting:", error); */
+      toastNotification({
+        toastTitle: "Error",
+        toastNotificationText:
+          "Failed to fetch tasks for counting. Check your token or network.",
+      });
+    }
+  };
+
+  countTasks();
 
   //& Display Tasks
   const displayTasks = (tasks) => {
@@ -283,8 +300,26 @@ if (window.location.href.includes("/user-dashboard.html")) {
       );
 
       task.status === "completed" && (status.style.color = "#317212");
+      task.status === "completed" &&
+        (taskDiv.style.backgroundColor = "#f0ffe9ff");
+
       task.status === "in-progress" && (status.style.color = "#69208b");
+      task.status === "in-progress" &&
+        (taskDiv.style.backgroundColor = "#f4dcffff");
+
       task.status === "pending" && (status.style.color = "#F79A00");
+      task.status === "pending" &&
+        (taskDiv.style.backgroundColor = "#fff0d8ff");
+
+      const overdue = new Date(task.deadline) < new Date();
+
+      overdue &&
+        task.status !== "completed" &&
+        (status.style.color = "#ff0000");
+
+      overdue &&
+        task.status !== "completed" &&
+        (taskDiv.style.backgroundColor = "#ffececff");
 
       const priority = document.createElement("p");
       const priorityStrong = document.createElement("strong");
@@ -355,7 +390,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
     });
 
     //& Update Tasks
-    const updateTask = async (id, title) => {
+    const updateTask = async (id) => {
       const token = localStorage.getItem("token");
 
       const updatedTask = {
@@ -420,18 +455,6 @@ if (window.location.href.includes("/user-dashboard.html")) {
   /*  updateTab.addEventListener("click", () => {
     updateTaskFormDisplay();
   }); */
-
-  const user = loggedInUser();
-  if (user) {
-    /*  console.log(`Welcome, ${user.username}!`); */
-    document.getElementById("loggedInUserName").textContent =
-      user.username && `${user.username}!`;
-  } else {
-    document.getElementById("loggedInUserName").textContent = "";
-    /* console.log("Please log in."); */
-  }
-
-  document.getElementById("greetings").textContent = greetBasedOnTime();
 
   //& Create new tasks
   document.getElementById("add-task").addEventListener("click", async () => {
@@ -509,6 +532,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
     }
 
     priorityBtn.addEventListener("click", () => {
+      console.log("Priority button clicked");
       // Check if the input already exists
       if (!document.querySelector(".priority-input")) {
         // Create a Div Element to Hold the input and the icon
@@ -594,7 +618,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `${API_BASE}/tasks/filter?priority=${priority}`,
+                `${API_BASE}/tasks-filter?priority=${priority}`,
                 {
                   method: "GET",
                   headers: {
@@ -742,7 +766,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `${API_BASE}/tasks/filter?status=${status}`,
+                `${API_BASE}/tasks-filter?status=${status}`,
                 {
                   method: "GET",
                   headers: {
@@ -872,7 +896,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
             try {
               // Make the request to the backend to filter tasks with status "completed"
               const response = await fetch(
-                `${API_BASE}/tasks/filter?due_date=${dueDate}`,
+                `${API_BASE}/tasks-filter?due_date=${dueDate}`,
                 {
                   method: "GET",
                   headers: {
@@ -961,7 +985,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
         try {
           // Make the request to the backend to filter tasks with status "completed"
           const response = await fetch(
-            `${API_BASE}/tasks/filter?status=completed`,
+            `${API_BASE}/tasks-filter?status=completed`,
             {
               method: "GET",
               headers: {
@@ -1021,6 +1045,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
     searchedbtn.addEventListener("click", async () => {
       // Get the value of the keyword to search for
       const searchedKeyword = searchedInput.value.trim();
+      console.log("Searched Keyword:", searchedKeyword);
 
       // Check if the searched keyword is empty
       if (searchedKeyword === "") {
@@ -1034,7 +1059,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
       try {
         // Make the request to the backend to filter tasks with the provided searchedKeyword
         const response = await fetch(
-          `${API_BASE}/tasks/search?keyword=${encodeURIComponent(
+          `${API_BASE}/tasks-search?keyword=${encodeURIComponent(
             searchedKeyword
           )}`,
           {
@@ -1086,4 +1111,38 @@ if (window.location.href.includes("/user-dashboard.html")) {
 
   validateUser();
   getTasks();
+}
+
+if (document.title === "Dashboard - TaskMaster") {
+  const loggedInUser = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_BASE}/user-profile`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch profile");
+      const profile = await response.json();
+      /*  console.log("User profile:", profile); */
+      return profile;
+    } catch (err) {
+      /* console.error("Error loading profile:", err); */
+    }
+  };
+
+  const user = await loggedInUser();
+  if (user) {
+    /*  console.log(`Welcome, ${user.username}!`); */
+    document.getElementById("loggedInUserName").textContent =
+      user.username && `${user.username}!`;
+  } else {
+    document.getElementById("loggedInUserName").textContent = "";
+    /* console.log("Please log in."); */
+  }
+
+  document.getElementById("greetings").textContent = greetBasedOnTime();
 }

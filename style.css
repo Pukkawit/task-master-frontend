@@ -890,6 +890,42 @@ button:hover {
   max-width: 100%;
 }
 
+.task-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 10px 5px;
+  background-color: #e3f1e9;
+  border-radius: 4px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--dark-color);
+    font-weight: 500;
+
+    span {
+      font-weight: bold;
+      color: var(--dark-color);
+    }
+
+    #completed-tasks {
+      color: #317212;
+    }
+    #pending-tasks {
+      color: #f79a00;
+    }
+    #in-progress-tasks {
+      color: #69208b;
+    }
+    #overdue-tasks {
+      color: #dd0101;
+    }
+  }
+}
+
 #search-task {
   position: absolute;
   right: 0;
@@ -1008,10 +1044,10 @@ footer {
   }
 
   .filter-div {
-    position: relative !important;
+    /*  position: relative !important; */
     display: flex !important;
     align-items: center !important;
-    top: -60px !important;
+    top: 40px !important;
     left: 0px !important;
     width: 100% !important;
     height: auto !important;
