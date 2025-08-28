@@ -512,6 +512,13 @@ if (window.location.href.includes("/user-dashboard.html")) {
     }
   });
 
+  //& Create Task Button
+  document
+    .getElementById("create-task-button")
+    .addEventListener("click", () => {
+      createTaskFormDisplay();
+    });
+
   //& Logout function
   const logout = () => {
     localStorage.removeItem("token"); // Clear the token

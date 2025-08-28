@@ -107,6 +107,34 @@
                 <p>In Progress: <span id="in-progress-tasks">0</span></p>
                 <p>Overdue: <span id="overdue-tasks">0</span></p>
               </div>
+
+              <div
+                title="create-task-button"
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  background-color: #ccc;
+                  padding-block: 8px;
+                  margin-bottom: 20px;
+                "
+              >
+                <button
+                  type="button"
+                  id="create-task-button"
+                  style="
+                    padding: 8px 16px;
+                    background-color: var(--secondary-color);
+                    color: #fff;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                  "
+                >
+                  Create Task
+                </button>
+              </div>
               <div class="task-list-container">
                 <!-- Task list will be dynamically generated here -->
               </div>
