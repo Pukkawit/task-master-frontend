@@ -164,6 +164,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
         actionFunction: () => getTasks(),
       });
     }
+    countTasks();
   };
 
   //& Fetch Tasks
@@ -197,6 +198,7 @@ if (window.location.href.includes("/user-dashboard.html")) {
       });
       /* alert("Failed to fetch tasks. Check your token or network."); */
     }
+    countTasks();
   };
 
   //& Count Tasks
@@ -252,8 +254,6 @@ if (window.location.href.includes("/user-dashboard.html")) {
       });
     }
   };
-
-  countTasks();
 
   //& Display Tasks
   const displayTasks = (tasks) => {
@@ -1145,4 +1145,5 @@ if (document.title === "Dashboard - TaskMaster") {
   }
 
   document.getElementById("greetings").textContent = greetBasedOnTime();
+  countTasks();
 }
